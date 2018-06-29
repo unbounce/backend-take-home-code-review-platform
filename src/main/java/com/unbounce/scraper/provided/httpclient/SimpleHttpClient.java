@@ -16,6 +16,7 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.EntityUtils;
 
 import com.unbounce.scraper.bootstrap.restricted.FailureMode;
 
@@ -70,7 +71,13 @@ public class SimpleHttpClient {
             final HttpEntity entity = response.getEntity();
             final ContentType contentType = ContentType.getOrDefault(entity);
             final Charset charset = contentType.getCharset();
-            return IOUtils.toString(entity.getContent(), charset);
+            //return IOUtils.toString(entity.getContent(), charset);
+            
+            if(entity!=null) { 
+            	return EntityUtils.toString(entity); 
+            }
+            
+            return "";
         }
     }
 
