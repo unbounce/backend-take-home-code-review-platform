@@ -1,0 +1,13 @@
+{
+  "url" : "sql://localhost/scraper",
+  "items" : [ {
+    "domain" : "https://careers.unbounce.com",
+    "size" : 5196
+  }, {
+    "domain" : "https://careers.unbounce.com",
+    "size" : 5195
+  }, {
+    "domain" : "http://unbouncepages.com/derek-lewis-software-developer",
+    "size" : 124025
+  } ]
+}
