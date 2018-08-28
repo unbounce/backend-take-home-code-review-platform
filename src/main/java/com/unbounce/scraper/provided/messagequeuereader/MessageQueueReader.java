@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.unbounce.scraper.MessageHandler;
+import com.unbounce.scraper.UrlSizeCounterService;
 import com.unbounce.scraper.bootstrap.restricted.Message;
 import com.unbounce.scraper.bootstrap.restricted.MessageQueue;
 
@@ -31,6 +32,8 @@ public class MessageQueueReader implements Runnable {
     private final int threads;
     private volatile boolean running = true;
     private final CountDownLatch completionLatch;
+    
+    private final UrlSizeCounterService urlCounter;
 
     public MessageQueueReader(final MessageQueue messageQueue,
                               final MessageHandler messageHandler) {
@@ -46,6 +49,7 @@ public class MessageQueueReader implements Runnable {
         this.messageQueue = messageQueue;
         this.threads = threads;
         this.completionLatch = new CountDownLatch(threads);
+        this.urlCounter = new UrlSizeCounterService();
     }
 
     public void start() {
@@ -68,8 +72,9 @@ public class MessageQueueReader implements Runnable {
                             throw new RuntimeException();
                         }
                     } else {
+                    	long size = urlCounter.getUrlSize(message.getBody());
+                    	messageHandler.handleMessage("size: " + size);
                         messageHandler.handleMessage(message.getBody());
-
                         messageQueue.deleteMessage(message.getId().toString());
                     }
                 } catch (final NoSuchElementException e) {
